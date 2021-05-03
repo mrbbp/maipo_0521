@@ -81,8 +81,6 @@
 #define SCR_HT 160
 Arduino_ST7735 lcd = Arduino_ST7735(TFT_DC, TFT_RST, TFT_CS);
 
-//#include <SdFat.h>
-
 #define USE_SDIO 0
 const uint8_t SD_CS = PA4;
 SdFat sd1;
@@ -137,14 +135,11 @@ void showRaw(char *name, int x, int y, int wd, int ht, int nl, int skipFr) {
       int rd = file.read(buf,wd*2*nl);
       sdTime += millis()-sdStartTime;
       lcdSPI();
-      //for(int j=0;j<nl;j++) lcd.drawImage(0,i*nl+j+(statMode>0?0:4),lcd.width(),1,buf+20+j*wd);
-      //lcd.drawImage(x,y+(i*nl),wd,nl,buf);
-      // tiens compte du positionnement de x et y (ecran à l'horizontal)
-      //for(int j=0;j<nl;j++) lcd.drawImage(x,y+(i*nl+j+(statMode>0?0:4)),wd,1,buf+20+j*wd);
       for(int j=0;j<nl;j++) lcd.drawImage(x,y+(i*nl+j),wd,1,buf+20+j*wd);
     }
     frTime = millis()-frTime;
     lcdTime = frTime-sdTime;
+    // afficahge du nom du fichier en mode debug
     if (debug) {
       lcd.setCursor(0,lcd.height()-7);
       lcdSPI();
@@ -152,7 +147,8 @@ void showRaw(char *name, int x, int y, int wd, int ht, int nl, int skipFr) {
       snprintf(txt,30,"%s",name);
       lcdSPI(); lcd.print(txt);
     }
-    if(skipFr>0) file.seekCur(wd*ht*2*skipFr);
+    // si skipFrame (passe des images -> se déplace dans le fichier)
+    if(skipFr>0) file.seekCur(wd*ht*2*skipFr); // hauteur * largeur * couleur en 16bits (2 octets)
   }
   file.close();
 }
@@ -185,6 +181,7 @@ void setup(void) {
     return;
   }
 }
+/* composition du "poème" */
 bool bDebut = true;
 int compteur = 0;
 // numéro du poeme
@@ -219,7 +216,7 @@ int nbrType2 = nbrRaw3 - nbrRaw2;
 
 void loop() {
   if (bDebut) {
-    // affiche le numéroi du poeme
+    // affiche le numéro du poeme
     bDebut = false;
     // transforme int en string
     itoa(compteurP%250,snum,10);
@@ -233,7 +230,7 @@ void loop() {
     strncat(chaine,nom,10); // ajoute ".raw"
     // Serial.print("appelle ");
     // Serial.println(chaine);
-    //affiche le fichier
+    //affiche le fichier avec le numéro
     showRaw(chaine,-20,0,200,128,32,0);
     delay(2000);
   }
@@ -318,7 +315,7 @@ void loop() {
     strncat(chaine,nom,10); // ajoute ".raw"
     // Serial.print("appelle ");
     // Serial.println(chaine);
-    //affiche le fichier
+    //affiche le fichier tiré
     showRaw(chaine,-20,0,200,128,32,0);
     if (compteur%nPh == nPh-1) { // tire un nouveau modele de phrase en fin de cycle de phrase
       nPh=random(2,5);
@@ -357,17 +354,16 @@ void loop() {
     parfois une suite de + de 6 phrases sans "Attendre" (DONE reste du compteur à chaque retirage de nPh)
 
   FAIT:
-    - ajouter un image de fin
-    - ajouter des images de numéro de poème
+    - ajouter une image "fin" en fin de poème
+    - ajouter des images de numéro du poème
     - mise en place de typologies de phrase cycle 
-      attendre que. (DONE)
-      attendre le/la/les (DONE)
-      attendre pour + infintif
-    déclare la fin du poeme quand les types (1 et 2) ont tous été tirés -> type = 0;
+        attendre que. (DONE)
+        attendre le/la/les (DONE)
+        attendre pour + infintif
+    déclare la fin du poème quand les types (1 et 2) ont tous été tirés -> type = 0;
     - correction de la limite du numero de Poeme (> 250)
-    - ajout d'un debug a l'écran du nom du fichier lu (si image jaune avoir le nom du fichier appelé)
+    - ajout d'un debug a l'écran du nom du fichier lu (si image jaune avoir le nom du fichier appelé qui pose pb)
   */
     
 }
-// possibilité de changer le delay en fonction de la proximité à l'écran via un telemetre ultrason ou laser...
 // ------------------------------------------------
