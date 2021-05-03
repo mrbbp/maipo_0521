@@ -1,13 +1,13 @@
 #!/bin/bash
 # affiche_param.sh
 
-# si gsed n'existe pas
-# brew install coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt
 cd -- "$(dirname "$0")"
+# nettoie l'affichage
 reset
 
+start=$(date +%s)
+
 echo "liste les fichiers .png, dans le dossier, et compresse en raw 200x128"
-# echo $(pwd)
 # liste les fichiers .mov dans le dossier dans l'array "fichiers"
 fichiers=($(find . -name "*.png"))
 
@@ -16,19 +16,19 @@ baseFichier=$(basename ${fichiers[0]} .mov)
 
 #nombre de fichiers trouvés
 len=${#fichiers[*]}
+# affiche le nombre de fichiers trouvés
 echo "${len} fichiers à traiter"
 
-# boucle sur l'array "fichiers"
+# boucle sur la liste "fichiers"
 for fichier in "${fichiers[@]}" ; do
 	((num++))
-	# echo $(basename $fichier .mov).raw
-  echo "compresse "$fichier
-  # nettoie $(basename $fichier .xhtml).html $(basename $fichier) $num
-  ffmpeg -i $fichier -vf scale=200:128 -vcodec rawvideo -f rawvideo -pix_fmt rgb565 $(basename $fichier .png).raw
+  	echo "compresse "$fichier
+  	ffmpeg -i $fichier -vf scale=200:128 -vcodec rawvideo -f rawvideo -pix_fmt rgb565 $(basename $fichier .png).raw
 done
 
 end=$(date +%s)
 runtime=$((end-start))
 sleep .1s
+#affiche la durée du traitement
 echo "Traitement terminé en ${runtime} sec."
 exit 0
