@@ -1,7 +1,8 @@
 # Workshop
 
-Vous trouverez les fichiers sources (codes js, arduino, scripts Bash pour ffmpeg) du travail produit avec les étudiants de 1ère année du DNMADe Graphisme en Mouvement
-Ce workshop aura/a eu lieu en Mai 2021 avec
+Vous trouverez les fichiers sources (codes js, arduino, scripts Bash pour ffmpeg) du travail produit avec les étudiants de 1ère année du DNMADe Graphisme en Mouvement.
+
+Ce workshop aura/a eu lieu, au lycée Bréquigny, Rennes en mai 2021 avec
 
 - Lou Sarabadzic, auteure et poète
 - la Maison de la poésie de Rennes
@@ -9,15 +10,16 @@ Ce workshop aura/a eu lieu en Mai 2021 avec
 - Tifenn Gargam, enseignante en Humanités
 - Éric Choisy-Bernard, enseignant, poste à profil numérique dans le parcours éditorial
 
-, au lycée Bréquigny, Rennes.
 
-## fichiers:
-### compVideo.command : 
-script auto executable (doubleclicable) sur MacOS.
+## fichiers initiaux:
+Regroupe les scripts prérequis.
+
+### bash/compVideo.command : 
+script auto executable (double-clic) sur MacOS[^5].
 Le script recherche tous les fichiers png dans le dossier encours, et les compresse en format raw video (datas brutes sans entête) avec FFMPEG[^3].
 Les fichiers doivent mesurer 200 * 128 px ou its ne s'afficheront pas correctement ave le code en arduino
 
-### player_attendre_11_20210429.ino
+### arduino/player_attendre_11_20210429.ino
 Le script est une adaptation du script de Pawel A. Hernik qui permet de lire des vidéos sur un écran 160*128 de type ST7735, muni d'un lecteur de carte SD (trouvé sur eBay ou aliexpress) avec une BluePill STM32F103.
 
 ![](https://s3-ap-southeast-1.amazonaws.com/a2.datacaciques.com/wm/NDAy/1592215164/3690029238.jpg)
@@ -30,14 +32,16 @@ Le script nécessite la distribution STM32 de Roger Clark (un fork de la version
 [^1]: version 1.1.4 compile, la version 2.x non
 [^2]:  version 1.5.0 est compatible avec la lib
 [^3]: [FFMPEG](https://ffmpeg.org/) doit être installé sur la machine
+[^5]: si ça ne fonctionne pas, il faut modifier les droits du fichier en executable. Si vous ne savez pas le faire, cherchez sur internet.
 
-### clignotement_potard_A5_01.js
+### espruino/clignotement_potard_A5_01.js
 Simple fichier js de test du montage de l'espruino pico. Un potentiomètre est placé en A5. La manipulation du potentiomètre fait varier la durée du clignotement de la led verte de l'espruino.
 
-### maipo_matrice_potard_01.js
+### espruino/maipo_matrice_potard_01.js
 Ce script js permet d'afficher une phrase avec un défilement droite gauche sur un module matrice rouge 20mm pour wemos  (1€ sur ebay ou aliexpress).
 Ce module  est équipé d'un driver TM1640 en i2c et se pilote avec 5 cables (+5v , +3v3, GND, SCL, SDA). La  vitesse de défilement est variable grace au potentiomètre en A5.
 ![](https://ae01.alicdn.com/kf/HTB1.DG_hZbI8KJjy1zdq6ze1VXav/V1-0-8x8-Matrix-LED-Shield-8-Step-Adjustable-Intensity-for-WEMOS-D1-mini.jpg)
+
 
 #### IMPORTANT
 - [STM32] La version officielle des cartes STM32 (par STMElectronics) pour arduino n'est pas compatible avec le script de lecteur vidéo qui utilise la lib rapide SD->Ecran via SPI de Pawel A. Hernik. Il faut installer la distrib de [Roger Clark](https://github.com/rogerclarkmelbourne/Arduino_STM32) (un fork de la version officielle)... il faut chercher sur internet. et notamment sur le forum [STM32duino](https://www.stm32duino.com)
